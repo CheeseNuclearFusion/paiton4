@@ -1,0 +1,98 @@
+class User:
+    count = 0
+
+    def __init__(self, name, login, password, level):
+        if type(self) is User:
+            User.count += 1
+            
+        self._name = name
+        self._login = login
+        self._password = password
+        self._level = level
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def login(self):
+        return self._login
+
+    @login.setter
+    def login(self, value):
+        print("Невозможно изменить логин!")
+
+    @property
+    def password(self):
+        return "********"
+
+    @password.setter
+    def password(self, value):
+        self._password = value
+
+    @property
+    def level(self):
+        return self._level
+
+    def show_info(self):
+        print(f"Name: {self._name}, Login: {self._login}")
+    
+    def __lt__(self, other):
+        return self._level < other._level
+
+    def __gt__(self, other):
+        return self._level > other._level
+
+    def __eq__(self, other):
+        return self._level == other._level
+
+    def __getattr__(self, name):
+
+        return f"Неизвестное свойство {name}"
+
+    def __setattr__(self, name, value):
+
+        if name.startswith('_'):
+            object.__setattr__(self, name, value)
+        elif name == 'name':
+            self._name = value 
+        elif name == 'password':
+            self._password = value
+        elif name == 'login':
+            print("Невозможно изменить логин!")
+        else:
+            print(f"Неизвестное свойство {name}")
+
+class SuperUser(User):
+    
+    count = 0
+
+    def __init__(self, name, login, password, role, level):
+        SuperUser.count += 1
+       
+        super().__init__(name, login, password, level)
+        self._role = role
+
+    @property
+    def role(self):
+        return self._role
+
+    @role.setter
+    def role(self, value):
+        self._role = value
+
+    def show_info(self):
+        
+        super().show_info()
+
+    def __setattr__(self, name, value):
+        if name.startswith('_'):
+            object.__setattr__(self, name, value)
+        elif name == 'role':
+            self._role = value
+        else:
+            super().__setattr__(name, value)
